@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Список дел</title>
+
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./libs/accordions/accordion.css">
+  <link rel="stylesheet" href="./libs/checkbox/checkbox.css">
+  <link rel="stylesheet" href="./css/iconsfont.css">
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script defer src="./libs/accordions/index.js"></script>
+  <script defer src="./js/script.js"></script>
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <header class="header">Список Дел</header>
+
+    <main class="main">
+      <div class="main__container">
+        <div class="accordion main__accordion" data-accordion>
+
+          <section class="tasks accordion__item accordion-item _open" id="active-tasks">
+            <button tabindex="-1" class="tasks__title accordion-item__title" type="button" data-accordion-opener>
+              <span>Задачи: <span class="tasks__count">0</span></span>
+            </button>
+            <div class="accordion-item__body">
+              <div>
+                <div class="tasks__items accordion-item__content">
+
+                  <!-- Активные дела -->
+
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="tasks accordion__item accordion-item _open" id="completed-tasks">
+            <button tabindex="-1" class="tasks__title accordion-item__title" type="button" data-accordion-opener>
+              <span>Завершенные: <span class="tasks__count">0</span></span>
+            </button>
+            <div class="accordion-item__body">
+              <div>
+                <div class="tasks__items accordion-item__content">
+
+                  <!-- Завершенные дела -->
+
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <div class="add-button">
+      <button name="add new task" id="add-task" class="_icon-plus add-task" type="button"></button>
+    </div>
+
+    <div id="editing-modal" class="modal">
+      <div class="modal__container">
+        <section class="modal__body">
+
+          <header class="modal__header">
+            <h2 class="modal__title">Редактирование дела</h2>
+            <button name="close modal" class="modal__close button _icon-plus" type="button"></button>
+          </header>
+
+          <div class="modal__content">
+            <div class="modal__task modal-task">
+              <div class="modal-task__checkbox check-task">
+                <input id="modal-checkbox" class="custom-checkbox" type="checkbox">
+                <label for="modal-checkbox">
+                  <span></span>
+                </label>
+              </div>
+              <input id="modal-text" class="modal-task__text task-text" placeholder="Название..." type="text">
+            </div>
+
+            <div class="modal__steps steps">
+              <div class="steps__items">
+
+                <div class="steps__item step">
+                  <div class="step__checkbox">
+                    <input id="step-1" class="custom-checkbox" type="checkbox">
+                    <label for="step-1">
+                      <span></span>
+                    </label>
+                  </div>
+                  <div class="step__content">
+                    <input class="step__text task-text" placeholder="Название..." type="text">
+                    <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
+                  </div>
+                </div>
+
+                <div class="steps__item step _completed">
+                  <div class="step__checkbox">
+                    <input checked id="step-1" class="custom-checkbox" type="checkbox">
+                    <label for="step-1">
+                      <span></span>
+                    </label>
+                  </div>
+                  <div class="step__content">
+                    <input class="step__text task-text" placeholder="Название..." type="text">
+                    <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
+                  </div>
+                </div>
+
+              </div>
+              <button name="add new step" class="steps__new" type="button">
+                <span class="_icon-plus"></span>
+                Добавить шаг
+              </button>
+            </div>
+          </div>
+
+          <footer class="modal__footer">
+            <p class="modal__info">
+              <span class="_icon-info"></span>
+              Изменения сохраняются автоматически
+            </p>
+            <button name="delete task" class="modal__delete task-delete button _icon-delete" type="button"></button>
+          </footer>
+
+        </section>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

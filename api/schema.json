@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "text": "Задача 1",
+    "completed": false,
+    "steps": [
+      {
+        "id": 1,
+        "text": "Шаг 1",
+        "completed": true
+      },
+      {
+        "id": 2,
+        "text": "Шаг 2",
+        "completed": false
+      },
+      {
+        "id": 3,
+        "text": "Шаг 3",
+        "completed": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Задача 2",
+    "completed": false,
+    "steps": []
+  },
+  {
+    "id": 3,
+    "text": "Задача 3",
+    "completed": true,
+    "steps": []
+  },
+  {
+    "id": 4,
+    "text": "Задача 3",
+    "completed": true,
+    "steps": []
+  }
+]

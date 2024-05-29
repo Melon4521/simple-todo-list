@@ -1,0 +1,169 @@
+:root {
+  --checkbox-accent-h: var(--accent-h);
+  --checkbox-accent-s: var(--accent-s);
+  --checkbox-accent-l: var(--accent-l);
+  --checkbox-accent: hsl(
+    var(--checkbox-accent-h),
+    var(--checkbox-accent-s),
+    var(--checkbox-accent-l)
+  );
+  --checkbox-size: 32px;
+  --checkbox-gap: 8px;
+}
+
+/* Скрываем браузерный чекбокс */
+.custom-checkbox {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.custom-checkbox + label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--checkbox-gap);
+  cursor: pointer;
+}
+
+/* Новый чекбокс */
+.custom-checkbox + label > span {
+  display: inline-block;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  border-radius: 50%;
+  border: 4px solid var(--checkbox-accent);
+
+  transition: all 0.1s ease-in;
+
+  position: relative;
+}
+
+.custom-checkbox + label > span::before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%) rotate(-45deg);
+
+  display: inline-block;
+  width: 60%;
+  height: 32%;
+  border-left: 3px solid #fff;
+  border-bottom: 3px solid #fff;
+
+  opacity: 0;
+  transition: opacity 0.1s ease-in;
+}
+
+/* checked */
+.custom-checkbox:checked + label > span {
+  background-color: var(--checkbox-accent);
+}
+
+.custom-checkbox:checked + label > span::before {
+  opacity: 1;
+}
+
+/* hover */
+.custom-checkbox:not(:disabled, :focus-visible) + label:hover > span {
+  background-color: hsla(
+    var(--checkbox-accent-h),
+    var(--checkbox-accent-s),
+    var(--checkbox-accent-l),
+    0.15
+  );
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.15
+    );
+}
+
+.custom-checkbox:checked:not(:disabled, :focus-visible) + label:hover > span {
+  background-color: var(--checkbox-accent);
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.15
+    );
+}
+
+/* focus-visible */
+.custom-checkbox:focus-visible + label > span {
+  background-color: hsla(
+    var(--checkbox-accent-h),
+    var(--checkbox-accent-s),
+    var(--checkbox-accent-l),
+    0.3
+  );
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.3
+    );
+}
+
+.custom-checkbox:checked:focus-visible + label > span {
+  background-color: var(--checkbox-accent);
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.3
+    );
+}
+
+/* active */
+.custom-checkbox:not(:disabled) + label:active > span,
+.custom-checkbox:active:not(:disabled) + label > span {
+  background-color: hsla(
+    var(--checkbox-accent-h),
+    var(--checkbox-accent-s),
+    var(--checkbox-accent-l),
+    0.45
+  );
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.45
+    );
+}
+
+.custom-checkbox:checked:not(:disabled) + label:active > span,
+.custom-checkbox:checked:active:not(:disabled) + label > span {
+  background-color: var(--checkbox-accent);
+  box-shadow: 0 0 0 5px
+    hsla(
+      var(--checkbox-accent-h),
+      var(--checkbox-accent-s),
+      var(--checkbox-accent-l),
+      0.45
+    );
+}
+
+/* disabled */
+.custom-checkbox:disabled + label {
+  cursor: default;
+  color: hsl(219, 8%, 60%);
+}
+
+.custom-checkbox:disabled + label > span {
+  border-color: hsl(219, 8%, 75%);
+}
+
+.custom-checkbox:disabled:checked + label > span {
+  background-color: hsl(219, 8%, 70%);
+  border-color: hsl(219, 8%, 70%);
+}

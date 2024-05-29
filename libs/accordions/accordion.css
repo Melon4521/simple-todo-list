@@ -1,0 +1,107 @@
+/* <Стили не инициализированных аккордионов>============================================================================== */
+
+.accordion {
+  background-color: var(--bg-color);
+}
+
+.accordion__item {
+  /* border-bottom: 3px solid hsl(0, 0%, 90%); */
+}
+
+.accordion-item__title {
+  width: 100%;
+  padding: 15px 0;
+
+  display: block;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+
+  text-align: left;
+
+  cursor: auto;
+}
+
+.accordion-item__content {
+  line-height: 130%;
+  padding-bottom: 15px;
+}
+
+/* </Стили не инициализированных аккордионов>============================================================================== */
+
+/* <Стили активных аккордионов>============================================================================== */
+
+/* Заголовок */
+.accordion._init .accordion-item__title {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 20px;
+
+  padding: 10px;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.2s ease-in, background-color 0.2s ease-in,
+    outline 0.2s ease-in;
+
+  cursor: pointer;
+}
+
+/* Состояния заголовка */
+@media (any-hover: hover) {
+  .accordion._init .accordion-item__title:hover {
+    /* background-color: hsl(0, 0%, 96%); */
+  }
+}
+
+.accordion._init .accordion-item__title:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px hsl(var(--accent-h), var(--accent-s), 90%);
+  z-index: 2;
+}
+
+/* Стрелка */
+.accordion._init .accordion-item__title::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-left: 2.5px solid var(--text-color);
+  border-bottom: 2.5px solid var(--text-color);
+
+  transform: translateY(0) rotate(-135deg);
+
+  transition: transform 0.3s ease-in;
+}
+
+.accordion._init .accordion-item._open .accordion-item__title::before {
+  transform: translateY(-15%) rotate(-45deg);
+}
+
+/* Контент аккордиона */
+.accordion._init .accordion-item__content {
+  padding: 10px;
+}
+
+/* Логика */
+.accordion._init .accordion-item__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  /* visibility нужен для того, чтобы пользователь
+  не смог взаимодействовать с содержимым аккордеона,
+  пока он не открыт (через табуляцию) */
+  visibility: hidden;
+
+  transition: grid-template-rows 0.2s ease-in, visibility 0.2s ease-in;
+}
+
+.accordion._init .accordion-item__body > div {
+  min-height: 0;
+}
+
+.accordion._init .accordion-item._open .accordion-item__body {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+/* </Стили активных аккордионов>============================================================================== */
