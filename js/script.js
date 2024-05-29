@@ -197,6 +197,13 @@ document.addEventListener('change', function (event) {
     json.find(item => +item.id === +target.dataset.id).completed =
       target.checked;
 
+    if (target.closest('.modal__task')) {
+      target
+        .closest('.modal__task')
+        .querySelector('#modal-text')
+        .classList.toggle('_completed');
+    }
+
     setLocalStorageData('tasks', json);
     renderTasks();
   }
