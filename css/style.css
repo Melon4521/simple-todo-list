@@ -214,6 +214,8 @@ input.task-text {
   opacity: 0;
   visibility: hidden;
 
+  -webkit-tap-highlight-color: transparent;
+
   transition: all 0.3s ease-in;
 }
 

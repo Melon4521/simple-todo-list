@@ -24,16 +24,16 @@ document.addEventListener('click', function (event) {
         'Вы действительно хотите удалить дело без возможности восстановления?',
       )
     ) {
-      const taskId = target.closest('.task-delete').dataset.id;
       const json = getLocalStorageData('tasks');
-      const newJson = deleteTask(json, taskId);
-      setLocalStorageData('tasks', newJson);
+      const taskId = target.closest('.task-delete').dataset.id;
+
+      deleteJsonElement(json, taskId);
+      setLocalStorageData('tasks', json);
 
       const task = document.querySelector(`.task[data-id="${taskId}"]`);
+      task.remove();
 
-      if (task) {
-        task.remove();
-      }
+      updateTasksCount();
 
       if (editingModal.classList.contains('_open')) {
         closeEditingModal();
@@ -173,16 +173,13 @@ document.addEventListener('click', function (event) {
     const stepsJson = json.find(
       item => +item.id === +stepsItems.dataset.id,
     ).steps;
-    const delIndex = stepsJson.findIndex(item => +item.id === +step.dataset.id);
 
-    if (delIndex !== -1) {
-      stepsJson.splice(delIndex, 1);
-      setLocalStorageData('tasks', json);
-      step.remove();
+    deleteJsonElement(stepsJson, step.dataset.id);
+    setLocalStorageData('tasks', json);
+    step.remove();
 
-      if (!stepsItems.children.length) {
-        stepsItems.innerHTML = '';
-      }
+    if (!stepsItems.children.length) {
+      stepsItems.innerHTML = '';
     }
   }
 });
@@ -349,13 +346,12 @@ function openEditingModal(json) {
   modalText.focus();
 }
 
-function deleteTask(json, taskId) {
+function deleteJsonElement(json, delId) {
   if (json.length) {
-    const delIndex = json.findIndex(task => +task.id === +taskId);
+    const delIndex = json.findIndex(item => +item.id === +delId);
 
     if (delIndex !== -1) {
       json.splice(delIndex, 1);
-      return json;
     }
   }
 }
@@ -436,12 +432,6 @@ function addNewTask() {
 
 function renderTasks() {
   const json = getLocalStorageData('tasks');
-  const activeTasksCount = document.querySelector(
-    '#active-tasks .tasks__count',
-  );
-  const completedTasksCount = document.querySelector(
-    '#completed-tasks .tasks__count',
-  );
 
   activeTasksRoot.innerHTML = '';
   completedTasksRoot.innerHTML = '';
@@ -486,6 +476,17 @@ function renderTasks() {
       activeTasksRoot.insertAdjacentHTML('afterbegin', taskHTML);
     }
   });
+
+  updateTasksCount();
+}
+
+function updateTasksCount() {
+  const activeTasksCount = document.querySelector(
+    '#active-tasks .tasks__count',
+  );
+  const completedTasksCount = document.querySelector(
+    '#completed-tasks .tasks__count',
+  );
 
   activeTasksCount.textContent = activeTasksRoot.children.length;
   completedTasksCount.textContent = completedTasksRoot.children.length;
