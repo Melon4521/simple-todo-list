@@ -81,37 +81,15 @@
                   <span></span>
                 </label>
               </div>
-              <input id="modal-text" class="modal-task__text task-text" placeholder="Название..." type="text">
+              <form class="modal-task__form">
+                <input id="modal-text" class="modal-task__text task-text" placeholder="Название..." type="text">
+              </form>
             </div>
 
             <div class="modal__steps steps">
               <div class="steps__items">
 
-                <div class="steps__item step">
-                  <div class="step__checkbox">
-                    <input id="step-1" class="custom-checkbox" type="checkbox">
-                    <label for="step-1">
-                      <span></span>
-                    </label>
-                  </div>
-                  <div class="step__content">
-                    <input class="step__text task-text" placeholder="Название..." type="text">
-                    <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
-                  </div>
-                </div>
-
-                <div class="steps__item step _completed">
-                  <div class="step__checkbox">
-                    <input checked id="step-1" class="custom-checkbox" type="checkbox">
-                    <label for="step-1">
-                      <span></span>
-                    </label>
-                  </div>
-                  <div class="step__content">
-                    <input class="step__text task-text" placeholder="Название..." type="text">
-                    <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
-                  </div>
-                </div>
+                <!-- Шаги -->
 
               </div>
               <button name="add new step" class="steps__new" type="button">

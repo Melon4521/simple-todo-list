@@ -16,23 +16,8 @@ body {
   font-family: Inter;
 }
 
-::-webkit-scrollbar {
-  width: calc((14 / 16) * 1em);
-  height: calc((14 / 16) * 1em);
-}
-
-::-webkit-scrollbar-track {
-  background-color: #fff;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #bfbfbf;
-  border-radius: 20px;
-  border: 3.9px solid #fff;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #9f9f9f;
+body._lock {
+  overflow: hidden;
 }
 
 [class*='__container'] {
@@ -58,6 +43,25 @@ body {
 .main {
   flex: 1 1 auto;
   padding-bottom: 50px;
+}
+
+::-webkit-scrollbar {
+  width: calc((14 / 16) * 1em);
+  height: calc((14 / 16) * 1em);
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 20px;
+  border: 3.9px solid #fff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9f9f9f;
 }
 
 .add-button {
@@ -134,10 +138,13 @@ body {
   justify-content: center;
 }
 
+.task__form {
+  flex: 1 1 auto;
+}
+
 .task-text {
   display: inline-block;
   width: 100%;
-  flex: 1 1 auto;
 
   cursor: pointer;
   position: relative;
@@ -293,6 +300,10 @@ input.task-text {
 .modal__task {
   /* 15-20 */
   margin-bottom: clamp(0.938rem, 0.682rem + 1.136vw, 1.25rem);
+}
+
+.modal-task__form {
+  flex: 1 1 auto;
 }
 
 .modal-task {

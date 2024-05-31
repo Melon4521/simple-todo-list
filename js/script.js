@@ -9,8 +9,8 @@ let lastActiveEditButton = null;
 
 renderTasks();
 
-document.addEventListener('click', function (event) {
-  const target = event.target;
+document.addEventListener('click', function (e) {
+  const target = e.target;
 
   // Adding new task
   if (target.closest('.add-task')) {
@@ -69,6 +69,7 @@ document.addEventListener('click', function (event) {
       openEditingModal(taskJson);
     } else {
       const editInput = document.createElement('input');
+      const taskText = target.closest('.task button.task__text');
 
       editInput.type = 'text';
       editInput.placeholder = 'Название...';
@@ -76,23 +77,19 @@ document.addEventListener('click', function (event) {
       editInput.className = 'task-text';
       editInput.value = taskJson.text;
 
-      target.closest('.task button.task__text').replaceWith(editInput);
+      taskText.replaceWith(editInput);
       editInput.focus();
 
-      editInput.onblur = editInput.onkeydown = function (event) {
-        if (
-          (event.type === 'keydown' && event.code === 'Enter') ||
-          event.type === 'blur'
-        ) {
-          editInput.onblur = editInput.onkeydown = null;
+      editInput.onblur = editInput.form.onsubmit = function (e) {
+        e.preventDefault();
+        editInput.onblur = editInput.form.onsubmit = null;
 
-          if (editInput.value.trim() !== taskJson.text) {
-            taskJson.text = editInput.value.trim() || 'Без названия';
-            setLocalStorageData('tasks', json);
-          }
-
-          renderTasks();
+        if (editInput.value.trim() !== taskJson.text) {
+          taskJson.text = editInput.value.trim() || 'Без названия';
+          setLocalStorageData('tasks', json);
         }
+
+        renderTasks();
       };
     }
   }
@@ -132,10 +129,10 @@ document.addEventListener('click', function (event) {
                 <span></span>
               </label>
             </div>
-            <div class="step__content">
+            <form class="step__content">
               <input class="step__text task-text" placeholder="Название..." type="text">
               <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
-            </div>
+            </form>
           </div>
         `,
       );
@@ -145,22 +142,18 @@ document.addEventListener('click', function (event) {
 
       newStepInput.focus();
 
-      newStepInput.onblur = newStepInput.onkeydown = function (event) {
-        if (
-          (event.type === 'keydown' && event.code === 'Enter') ||
-          event.type === 'blur'
-        ) {
-          newStepInput.onblur = newStepInput.onkeydown = null;
+      newStepInput.onblur = newStepInput.form.onsubmit = function (e) {
+        e.preventDefault();
+        newStepInput.onblur = newStepInput.form.onsubmit = null;
 
-          taskJson.steps.push({
-            id: stepId,
-            text: newStepInput.value.trim() || 'Без названия',
-            completed: false,
-          });
+        taskJson.steps.push({
+          id: stepId,
+          text: newStepInput.value.trim() || 'Без названия',
+          completed: false,
+        });
 
-          newStepInput.value = newStepInput.value.trim() || 'Без названия';
-          setLocalStorageData('tasks', json);
-        }
+        newStepInput.value = newStepInput.value.trim() || 'Без названия';
+        setLocalStorageData('tasks', json);
       };
     }
   }
@@ -184,8 +177,8 @@ document.addEventListener('click', function (event) {
   }
 });
 
-document.addEventListener('change', function (event) {
-  const target = event.target;
+document.addEventListener('change', function (e) {
+  const target = e.target;
 
   // Task Checkbox
   if (target.closest('.check-task')) {
@@ -207,14 +200,7 @@ document.addEventListener('change', function (event) {
 
   // Editing task text
   if (target.id === 'modal-text') {
-    const json = getLocalStorageData('tasks');
-    const taskJson = json.find(item => +item.id === +target.dataset.id);
-
-    if (taskJson && target.value.trim() !== taskJson.text) {
-      taskJson.text = target.value.trim() || 'Без названия';
-      setLocalStorageData('tasks', json);
-      renderTasks();
-    }
+    editTaskText(target);
   }
 
   // Step checkbox
@@ -234,57 +220,74 @@ document.addEventListener('change', function (event) {
 
   // Editing step text
   if (target.closest('.step__text')) {
-    editStepText(target);
+    editStepText(target.closest('.step__text'));
   }
 });
 
-document.addEventListener('keydown', function (event) {
-  const target = event.target;
-
+document.addEventListener('keydown', function (e) {
   // Adding new task
-  if (event.shiftKey && event.code === 'Equal') {
+  if (e.shiftKey && e.code === 'Equal') {
     addNewTask();
-    event.preventDefault();
+    e.preventDefault();
   }
+});
+
+document.addEventListener('submit', function (e) {
+  e.preventDefault();
 
   // Editing step text
-  if (event.code === 'Enter' && target.closest('.step__text')) {
-    editStepText(target);
+  if (e.target.closest('.step__content')) {
+    editStepText(
+      e.target.closest('.step__content').querySelector('.step__text'),
+    );
   }
 });
 
-window.onbeforeunload = function () {
-  return false;
-};
+// window.onbeforeunload = function () {
+//   return false;
+// };
 
 //<FUNCTIONS>==============================================================================
 
-function editStepText(target) {
+function editStepText(input) {
   const json = getLocalStorageData('tasks');
-  const step = target.closest('.step');
-  const stepsItems = target.closest('.steps__items');
+  const step = input.closest('.step');
+  const stepsItems = input.closest('.steps__items');
   const stepJson = json
     .find(item => +item.id === +stepsItems.dataset.id)
     .steps.find(item => +item.id === +step.dataset.id);
 
-  if (stepJson && target.value.trim() !== stepJson.text) {
-    stepJson.text = target.value.trim() || 'Без названия';
-    target.value = stepJson.text;
+  if (stepJson && input.value.trim() !== stepJson.text) {
+    stepJson.text = input.value.trim() || 'Без названия';
+    input.value = stepJson.text;
     setLocalStorageData('tasks', json);
+  }
+}
+
+function editTaskText(input) {
+  const json = getLocalStorageData('tasks');
+  const taskJson = json.find(item => +item.id === +input.dataset.id);
+
+  if (taskJson && input.value.trim() !== taskJson.text) {
+    taskJson.text = input.value.trim() || 'Без названия';
+    input.value = taskJson.text;
+    setLocalStorageData('tasks', json);
+    renderTasks();
   }
 }
 
 function closeEditingModal() {
   editingModal.classList.remove('_open');
+  lockBody(false);
   document.removeEventListener('focusin', modalFocus);
   lastActiveEditButton.focus();
 }
 
-function modalFocus(event) {
-  if (event.target.closest('.modal')) {
-    modalActiveElement = event.target;
+function modalFocus(e) {
+  if (e.target.closest('.modal')) {
+    modalActiveElement = e.target;
   } else {
-    event.target.blur();
+    e.target.blur();
     modalActiveElement.focus();
   }
 }
@@ -330,17 +333,18 @@ function openEditingModal(json) {
             <span></span>
           </label>
         </div>
-        <div class="step__content">
+        <form class="step__content">
           <input class="step__text task-text" value="${
             step.text
           }" placeholder="Название..." type="text">
           <button name="delete step" class="step__delete button _icon-delete" type="button"></button>
-        </div>
+        </form>
       </div>
     `;
   });
 
   editingModal.classList.add('_open');
+  lockBody(true);
   document.addEventListener('focusin', modalFocus);
   lastActiveEditButton = document.activeElement;
   modalText.focus();
@@ -390,7 +394,9 @@ function addNewTask() {
             <span></span>
           </label>
         </div>
-        <input id="new-input" type="text" placeholder="Название..." class="task__text task-text" name="task description">
+        <form class="task__form">
+          <input id="new-input" type="text" placeholder="Название..." class="task__text task-text" name="task description">
+        </form>
         <div class="task__buttons">
           <button data-id="${taskId}" name="edit task" class="button task-edit _icon-edit" type="button"
             title="Редактировать"></button>
@@ -404,29 +410,25 @@ function addNewTask() {
   const newInput = activeTasksRoot.querySelector('#new-input');
   newInput.focus();
 
-  newInput.onblur = newInput.onkeydown = function (event) {
-    if (
-      (event.type === 'keydown' && event.code === 'Enter') ||
-      event.type === 'blur'
-    ) {
-      newInput.onblur = newInput.onkeydown = null;
+  newInput.onblur = newInput.form.onsubmit = function (e) {
+    e.preventDefault();
+    newInput.onblur = newInput.form.onsubmit = null;
 
-      const task = newInput.closest('.task');
+    const task = newInput.closest('.task');
 
-      if (newInput.value.trim()) {
-        task.dataset.text = newInput.value.trim();
-      }
-
-      json.push({
-        id: +task.dataset.id,
-        text: task.dataset.text,
-        completed: false,
-        steps: [],
-      });
-
-      setLocalStorageData('tasks', json);
-      renderTasks();
+    if (newInput.value.trim()) {
+      task.dataset.text = newInput.value.trim();
     }
+
+    json.push({
+      id: +task.dataset.id,
+      text: task.dataset.text,
+      completed: false,
+      steps: [],
+    });
+
+    setLocalStorageData('tasks', json);
+    renderTasks();
   };
 }
 
@@ -454,9 +456,11 @@ function renderTasks() {
             <span></span>
           </label>
         </div>
-        <button name="task description" class="task__text task-text" type="button">
-          ${task.text}
-        </button>
+        <form class="task__form">
+          <button name="task description" class="task__text task-text" type="button">
+            ${task.text}
+          </button>
+        </form>
         <div class="task__buttons">
           <button data-id="${
             task.id
@@ -501,6 +505,17 @@ function updateTasksCount() {
     document.querySelector('#completed-tasks').hidden = false;
   } else {
     document.querySelector('#completed-tasks').hidden = true;
+  }
+}
+
+function lockBody(lock) {
+  if (lock) {
+    document.body.style.paddingRight =
+      window.innerWidth - document.documentElement.offsetWidth + 'px';
+    document.body.classList.add('_lock');
+  } else {
+    document.body.style.paddingRight = '';
+    document.body.classList.remove('_lock');
   }
 }
 
